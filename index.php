@@ -1,46 +1,33 @@
 <?php
 
 header("Content-Type: application/json; charset=UTF-8");
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header("Referrer-Policy: no-referrer");
 
-$lastNames =
-    ["Öberg", "Åhlund", "Pettersson", "Axellie", "Thunberg", "Ahlström", "Pettersson", "Silfwer", "Lantz Giraldo", "Thorell"];
-
-$female = ["Åsa", "Marta", "Maja", "Erika", "Lisah", "Freja", "Anna-Karin", "Nina", "Amanda", "Inna"];
-
-$male = ["Björn", "Gustaf", "Jacob", "Erik", "Dragan", "Olle", "Dino", "Mahmud", "Axel", "Antonio"];
-
-$names = array();
+$firstnamesFemale = ["Åsa", "Lotta", "Greta", "Amanda", "Marta", "Maja", "Nina", "Erika", "Deepthi", "Inna"];
+$firstnamesMale = ["Robin", "Mahmud", "Kevin", "Sebastian", "Gustaf", "Björn", "Erik", "Dragan", "Özgur", "Dino"];
+$lastNames = ["Johnsson", "Hedlund", "Al Hakim", "Gedda", "Basele", "Carlson", "Bernadotte", "Wonder", "Richie", "Olsson"];
 
 for ($i = 0; $i < 10; $i++) {
     $random = rand(0, 1);
-    $firstNames = $random ? $female : $male;
+    $firstNames = $random ? $firstnamesFemale : $firstnamesMale;
+    $firstName = $firstNames[rand(0, 9)];
+    $lastName = $lastNames[rand(0, 9)];
+    $search = 'åäöÅÄÖ';
+    $replace = 'aaoAAO';
+    $whitespace = " ";
+    $noSpace = "";
+    $email = strtolower(substr(strtr($firstName, $search, $replace), 0, 2) . substr(strtr(str_replace(' ', '', $lastName), $search, $replace), 0, 3)) . '@example.com';
 
-    $firstname = $firstNames[rand(0, 9)];
-    $lastname = $lastNames[rand(0, 9)];
-    $email = mb_strtolower(mb_substr($firstname, 0, 2, 'UTF-8') . mb_substr($lastname, 0, 3, 'UTF-8'), 'UTF-8') . "@example.com";
-
-    $search = "åäö";
-    $replace = "aao";
-    $email = str_replace($search, $replace, $email);
-
-    $name = array(
-        "firstname" => $firstname,
-        "lastname" => $lastname,
+    $names[] = array(
+        "firstname" => $firstName,
+        "lastname" => $lastName,
         "gender" => $random ? "female" : "male",
         "age" => rand(1, 100),
         "email" => $email
     );
-    array_push($names, $name);
 }
 
-$json = json_encode(
-    $names,
-    JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT
-);
-
-echo $json;
+echo json_encode($names, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
