@@ -24,8 +24,8 @@ for ($i = 0; $i < 10; $i++) {
     $lastname = $lastNames[rand(0, 9)];
     $email = mb_strtolower(mb_substr($firstname, 0, 2, 'UTF-8') . mb_substr($lastname, 0, 3, 'UTF-8'), 'UTF-8') . "@example.com";
 
-    $search = array('å', 'ä', 'ö');
-    $replace = array('a', 'a', 'o');
+    $search = "åäö";
+    $replace = "aao";
     $email = str_replace($search, $replace, $email);
 
     $name = array(
