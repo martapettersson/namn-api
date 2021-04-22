@@ -7,25 +7,29 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header("Referrer-Policy: no-referrer");
 
 $female = ["Åsa", "Lotta", "Greta", "Amanda", "Marta", "Maja", "Nina", "Erika", "Deepthi", "Inna"];
-$male = ["Robin", "Mahmud", "Kevin", "Sebastian", "Gustaf", "Björn", "Erik", "Dragan", "Özgur", "Dino"];
-$lastNames = ["Johnsson", "Hedlund", "Al Hakim", "Gedda", "Basele", "Carlson", "Bernadotte", "Wonder", "Richie", "Olsson"];
+$male = ["Robin", "Mahmud", "Kevin", "Sebastian", "Gustaf", "Björn", "Erik", "Dragan", "Özgür", "Dino"];
+$lastNames = ["Johnsson", "Hedlund", "Al Hakim", "Gedda", "Basele", "Carlson", "Bernadotte", "Wonder", "Richie", "Sälg"];
+
+function fi_las($name, $stop)
+{
+    $search = ['å', 'ä', 'ö', 'Å', 'Ä', 'Ö', ' '];
+    $replace = ['a', 'a', 'o', 'A', 'A', 'O', ''];
+    return strtolower(substr(str_replace($search, $replace, $name), 0, $stop));
+}
 
 for ($i = 0; $i < 10; $i++) {
-    $random = rand(0, 1);
-    $firstNames = $random ? $female[rand(0, 9)] : $male[rand(0, 9)];
+    $gender = rand(0, 1);
+    $firstName = $gender ? $female[rand(0, 9)] : $male[rand(0, 9)];
     $lastName = $lastNames[rand(0, 9)];
-    $search = 'åäöÅÄÖ';
-    $replace = 'aaoAAO';
-    $fi = substr(strtr($firstName, $search, $replace), 0, 2);
-    $las = substr(strtr(str_replace(' ', '', $lastName), $search, $replace), 0, 3);
-    $email = strtolower($fi . $las) . '@example.com';
+    $fi = fi_las($firstName, 2);
+    $las = fi_las($lastName, 3);
 
     $names[] = array(
         "firstname" => $firstName,
         "lastname" => $lastName,
-        "gender" => $random ? "female" : "male",
+        "gender" => $gender ? "female" : "male",
         "age" => rand(1, 100),
-        "email" => $email
+        "email" => $fi . $las . '@example.com'
     );
 }
 
